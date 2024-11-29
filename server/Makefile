@@ -21,6 +21,9 @@ migrate-status: build
 run: build
 	./$(APP_NAME)
 
+dev:
+	air
+
 # Clean build files
 clean:
 	rm -f $(APP_NAME)

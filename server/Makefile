@@ -1,6 +1,9 @@
 # Define application name
 APP_NAME=talon
 
+# Define app mode (default to dev if not set)
+APP_MODE ?= dev
+
 # Build the application binary
 build:
 	go build -o $(APP_NAME) .
@@ -21,8 +24,14 @@ migrate-status: build
 run: build
 	./$(APP_NAME)
 
+# Run the app in development mode
 dev:
-	air
+	@echo "Running in development mode..."
+ifeq ($(OS),Windows_NT)
+	set APP_MODE=dev && air
+else
+	APP_MODE=dev air
+endif
 
 # Clean build files
 clean:

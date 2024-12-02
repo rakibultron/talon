@@ -13,8 +13,10 @@ import (
 
 func main() {
 
+	env := os.Getenv("APP_MODE")
 	// Load environment variables
-	envErr := godotenv.Load(".env.local")
+	envFile := fmt.Sprintf(".env.%s", env)
+	envErr := godotenv.Load(envFile)
 	if envErr != nil {
 		log.Fatal("Error loading .env file")
 	}

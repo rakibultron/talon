@@ -4,9 +4,8 @@ APP_NAME=talon
 # Define app mode (default to dev if not set)
 APP_MODE ?= dev
 
-# Build the application binary
 build:
-	go build -o $(APP_NAME) .
+	set APP_MODE=$(APP_MODE) && go build -o $(APP_NAME) .
 
 # Apply all migrations
 migrate-up: build

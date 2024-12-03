@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/rakibultron/talon/db"
+	"github.com/rakibultron/talon/routes"
 	"github.com/spf13/cobra"
 )
 
@@ -18,6 +19,8 @@ func main() {
 	envFile := fmt.Sprintf(".env.%s", env)
 	envErr := godotenv.Load(envFile)
 	if envErr != nil {
+
+		fmt.Println(envErr)
 		log.Fatal("Error loading .env file")
 	}
 
@@ -48,6 +51,7 @@ func main() {
 func startServer(port string) {
 	// Initialize Gin router
 	r := gin.Default()
+	routes.Routes(r)
 
 	// Define basic ping route
 	r.GET("/ping", func(c *gin.Context) {

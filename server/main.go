@@ -53,6 +53,15 @@ func startServer(port string) {
 	r := gin.Default()
 	routes.Routes(r)
 
+	dbCon, dbconErr := db.DatabaseConnection()
+
+	if dbconErr != nil {
+		fmt.Println("Database connection failed!")
+	} else {
+		fmt.Println("Database connection success")
+		fmt.Printf("%T", dbCon)
+	}
+
 	// Define basic ping route
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{

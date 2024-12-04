@@ -9,5 +9,6 @@ func Routes(router *gin.Engine) {
 	api := router.Group("/v1/api")
 
 	v1.AuthRoutes(api)
+	v1.UserRoutes(api)
 
 }

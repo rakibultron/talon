@@ -7,21 +7,19 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"github.com/rakibultron/talon/db"
 	"github.com/rakibultron/talon/db/sqlcgen"
-	"github.com/rakibultron/talon/utils"
 )
 
 // CreateUserRequest defines the request payload for creating a user
 type CreateUserRequest struct {
+	Id    string `json:"id" binding:"required"`
 	Name  string `json:"name" binding:"required"`
 	Email string `json:"email" binding:"required,email"`
 }
 type LoginUserRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" validate:"min=8,max=32,alphanum"`
-	Id       string `json:"id" binding:"required"`
 }
 
 // RegisterUser adds a new user to the database
@@ -49,18 +47,18 @@ func RegisterUser(request CreateUserRequest) (sqlcgen.CreateUserRow, error) {
 }
 
 // LoginUser handles user login
-func LoginUser(request LoginUserRequest) (sqlcgen.GetUserByIDRow, string, error) {
+func LoginUser(request LoginUserRequest) (sqlcgen.GetUserByEmailRow, string, error) {
 
 	dbcon := db.GetDbCon()
-
-	id, _, _ := request.Id, request.Email, request.Password
+	email, _ := request.Password, request.Email
 	// Use the returned DBTX for queries
 	queries := sqlcgen.New(dbcon)
 
-	uuidValue, _ := uuid.Parse(id)
+	// uuidValue, _ := uuid.Parse(id)
 
 	// Perform the database operation to create a new user
-	user, _ := queries.GetUserByID(context.Background(), utils.ConvertUUIDToPGXUUID(uuidValue))
+	// user, _ := queries.GetUserByID(context.Background(), utils.ConvertUUIDToPGXUUID(uuidValue))
+	user, _ := queries.GetUserByEmail(context.Background(), email)
 
 	jwtSecrate := os.Getenv("JWT_SECRATE")
 

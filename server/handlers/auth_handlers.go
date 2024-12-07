@@ -50,8 +50,10 @@ func LoginUser(c *gin.Context) {
 		true,         // HttpOnly
 	)
 	c.JSON(http.StatusOK, gin.H{
-		"user": user,
-		"jwt":  jwt,
+		"data": gin.H{
+			"user": user,
+			"jwt":  jwt,
+		},
 	})
 
 }

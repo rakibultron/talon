@@ -4,15 +4,22 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
+import useAuth from "@/hooks/authHooks";
+import axios from "axios";
 
 const LoginForm = () => {
+  const { userLogin } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    const loginData = await userLogin("/auth/login", data);
+
+    console.log({ data, loginData });
+  };
 
   return (
     <div>

@@ -2,7 +2,7 @@ package handlers
 
 import (
 	// "fmt"
-	"fmt"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,18 +28,29 @@ func RegisterUser(c *gin.Context) {
 
 // LoginUser handles user login
 func LoginUser(c *gin.Context) {
-
 	var body services.LoginUserRequest
 
+	// Bind the JSON body to the request struct and handle validation errors
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid request body",
+			"details": err.Error(),
+		})
 		return
 	}
 
-	user, jwt, _ := services.LoginUser(body)
+	// Call the service layer to process the login
+	user, jwt, err := services.LoginUser(body)
+	if err != nil {
 
-	fmt.Println(jwt)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "An internal error occurred",
+			"details": err.Error(),
+		})
+		return
+	}
 
+	// Set the authentication cookie
 	c.SetCookie(
 		"user_token", // Name of the cookie
 		jwt,          // Value of the cookie
@@ -49,11 +60,12 @@ func LoginUser(c *gin.Context) {
 		false,        // Secure (HTTPS only)
 		true,         // HttpOnly
 	)
+
+	// Respond with the user data and JWT
 	c.JSON(http.StatusOK, gin.H{
 		"data": gin.H{
 			"user": user,
 			"jwt":  jwt,
 		},
 	})
-
 }

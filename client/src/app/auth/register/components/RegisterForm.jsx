@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-
+import useAuth from "@/hooks/authHooks";
 const RegisterForm = () => {
   const {
     register,
@@ -12,7 +12,12 @@ const RegisterForm = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const { userRegister } = useAuth();
+
+  const onSubmit = async (data) => {
+    const registerData = await userRegister("/auth/register", data);
+    console.log({ registerData });
+  };
   return (
     <div>
       {/* Registration Form */}

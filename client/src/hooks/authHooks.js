@@ -22,7 +22,19 @@ const useAuth = () => {
             throw error;
         }
     }
-    return { userLogin, loading, error };
+
+    const userRegister = async (url, body, { headers = {}, params = {}, ...restOptions } = {}) => {
+        try {
+            const res = await axios.post(url, body, { headers, params, ...restOptions })
+            router.push("/auth/login")
+            return res.data;
+        } catch (error) {
+            console.log({ error })
+            setError(error);
+            throw error;
+        }
+    }
+    return { userLogin, userRegister, loading, error };
 }
 
 export default useAuth

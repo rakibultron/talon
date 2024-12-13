@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import useAuth from "@/hooks/authHooks";
-import axios from "axios";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
   const { userLogin } = useAuth();
@@ -16,14 +16,18 @@ const LoginForm = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const loginData = await userLogin("/auth/login", data);
-
-    console.log({ data, loginData });
+    try {
+      // Mock API call
+      await userLogin("/auth/login", data);
+      toast.success("Login successful!");
+    } catch (error) {
+      const { message } = error.response?.data || "Login failed!";
+      toast.error(message);
+    }
   };
 
   return (
     <div>
-      {/* Login Form */}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4">
           <div>
@@ -50,10 +54,9 @@ const LoginForm = () => {
           </Button>
         </div>
       </form>
-      {/* Footer Links */}
       <div className="mt-6 text-center text-sm text-gray-500">
         <p>
-          Don't have an account?
+          Don't have an account?{" "}
           <a href="#" className="font-medium text-primary">
             Sign up
           </a>

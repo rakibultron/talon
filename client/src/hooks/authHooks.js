@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "@/lib/axios";
+import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 const useAuth = () => {
@@ -17,7 +18,7 @@ const useAuth = () => {
             console.log({ res })
             return res.data;
         } catch (error) {
-            console.log({ error })
+            // console.log({ error })
             setError(error);
             throw error;
         }
@@ -29,6 +30,7 @@ const useAuth = () => {
             router.push("/auth/login")
             return res.data;
         } catch (error) {
+            toast(error.message)
             console.log({ error })
             setError(error);
             throw error;
